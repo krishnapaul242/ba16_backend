@@ -62,7 +62,6 @@ exports.check_product = async (req, res, next) => {
             }
         }
         if (Object.keys(err).length > 0) {
-		console.log(err);
             return res.status(400).json({
                 error: err,
                 status: 0,

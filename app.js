@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const path = require("path");
 
@@ -15,7 +16,7 @@ const userRouter = require('./routes/user');
 const productRouter = require('./routes/product');
 const feedRouter = require('./routes/feed');
 const orderRouter = require('./routes/order');
-// const offerRouter = require('./routes/offer');
+const offerRouter = require('./routes/offer');
 
 
 
@@ -26,6 +27,7 @@ app.use(cors());
 app.use(helmet());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({limit: '50mb',extended: true}));
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -48,7 +50,7 @@ app.use('/api/user', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/feed', feedRouter);
 app.use('/api/order', orderRouter);
-// app.use('/api/offer', offerRouter);
+app.use('/api/offer', offerRouter);
 
 
 
