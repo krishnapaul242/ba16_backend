@@ -93,6 +93,9 @@ module.exports = {
             PATH: process.env.PRODUCT_IMAGE_PATH,
             HEIGHT: 400,
             WIDTH: 400
+        },
+        OFFER_IMAGE: {
+            PATH: process.env.OFFER_IMAGE_PATH,
         }
     },
 
