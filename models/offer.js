@@ -48,7 +48,7 @@ exports.delete_offer = async (id) => {
 
 exports.get_single_offer = async (id) => {
     return new Promise((resolve, reject) => {
-        let query = `SELECT id, CONCAT('${config.API_DETAILS.URL + config.FILE.OFFER_IMAGE.PATH}', image) AS image FROM tbl_offers WHERE id=?`;
+        let query = `SELECT id FROM tbl_offers WHERE id=?`;
         let value = [id];
         db.query(query, value,(err, result) => {
             if (err) {

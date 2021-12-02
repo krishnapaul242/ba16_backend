@@ -49,21 +49,28 @@ exports.get_offer_list = async (req, res, next) => {
 
 exports.delete_offer = async (req, res, next) => {
     try {
-        const { id } = req.body;
-        const offer = offerModel.get_single_offer(id)
+        const { id, image } = req.body;
+        const offer = await offerModel.get_single_offer(id)
         if (!offer.length)
             return res.status(404).json({
                 message: "Offer doesn't exist",
                 status: 0
             });
-        const imageName = offer[0].image.split('/').reverse()[0];
+        const imageName = image.split('/').reverse()[0];
         const deletedImagePath = path.join(__dirname, '../', 'public') + config.FILE.OFFER_IMAGE.PATH + imageName;
         await offerModel.delete_offer(id).then(async () => {
-            fs.unlinkSync(deletedImagePath);
-            return res.status(200).json({
-                message: "Offer deleted successfully",
-                status: 1
-            });
+            try {
+                fs.unlinkSync(deletedImagePath);
+                return res.status(200).json({
+                    message: "Offer deleted successfully",
+                    status: 1
+                });
+            } catch (err) {
+                return res.status(200).json({
+                    message: "Offer deleted successfully (There was an error while deleting the image)",
+                    status: 1
+                });
+            }
         }).catch(err => {
             next(err);
         });
