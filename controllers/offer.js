@@ -21,6 +21,7 @@ exports.add_offer = async (req, res, next) => {
         await offerModel.add_offer(data)
         return res.status(200).json({
             message: "Offer added successfully",
+            data: data,
             status: 1
         });
     } catch (err) {
@@ -63,6 +64,7 @@ exports.delete_offer = async (req, res, next) => {
                 fs.unlinkSync(deletedImagePath);
                 return res.status(200).json({
                     message: "Offer deleted successfully",
+                    data: offer[0],
                     status: 1
                 });
             } catch (err) {
