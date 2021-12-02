@@ -1,6 +1,13 @@
-process.env.NODE_ENV === "production" ?
-    require("dotenv").config({ path: "./.env.production" }) :
+// process.env.NODE_ENV === "production" ?
+//     require("dotenv").config({ path: "./.env.production" }) :
+//     require("dotenv").config({ path: "./.env.development" });
+if (process.env.NODE_ENV === "production") {
+    require("dotenv").config({ path: "./.env.production" })
+}else if(process.env.NODE_ENV === "development"){
     require("dotenv").config({ path: "./.env.development" });
+}else{
+    require("dotenv").config({ path: "./.env.testing" });
+}
 
 const { get_current_date_time, add_days, add_minutes } = require("../shared/datetime");
 
