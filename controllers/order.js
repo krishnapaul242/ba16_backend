@@ -6,7 +6,7 @@ const fs = require('fs');
 const {add_minutes} = require('../shared/datetime');
 const config = require('../configuration/config');
 const orderModel = require('../models/order');
-const productModel = require('../models/product');
+// const productModel = require('../models/product');
 
 exports.add_order = async (req, res, next) => {
     const UID = Date.now()
@@ -53,123 +53,99 @@ exports.add_order = async (req, res, next) => {
     }
 };
 
-// exports.add_table_booking = async (req, res, next) => {
-//     try {
-//         const {
-//             date,
-//             time,
-//             member
-//         } = req.value.body;
+exports.update_payment_status = async (req, res, next) => {
+    try {
+        const data = req.body;
 
-//         let booking = {
-//             user_id: req.user.id,
-//             time: add_minutes(date + " " + time, 20 ),
-//             date: new Date(date),
-//             member: Number(member)
-//         };
-//         console.log(booking)
-//         await orderModel.add_table_booking(booking).then(async () => {
-//             return res.status(200).json({
-//                 message: "Your table booking successfully",
-//                 validUpto: booking.time,
-//                 status: 1
-//             });
-//         }).catch(err => {
-//             next(err);
-//         });
-//     } catch (err) {
-//         const error = new Error(err);
-//         next(error);
-//     }
-// };
+        await orderModel.update_payment_status(data).then(async () => {
+            return res.status(200).json({
+                message: "Payment status updated successfully",
+                status: 1
+            });
+        }).catch(err => {
+            next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }
+};
 
-// exports.update_product = async (req, res, next) => {
-//     try {
-//         const {
-//             name,
-//             category,
-//             description,
-//             price,
-//             is_nonveg,
-//         } = req.value.body;
+exports.update_order_status = async (req, res, next) => {
+    try {
+        const data = req.body;
 
-//         let product = {
-//             category: encode(category),
-//             description: encode(description),
-//             price: encode(price),
-//             is_nonveg: encode(is_nonveg),
-//             is_avaliable: req.value.body.is_avaliable ? encode(req.value.body.is_avaliable) : encode("Yes"),
-//             discount_price: req.value.body.discount_price ? encode(req.value.body.discount_price) : 0,
-//         };
-//         await productModel.update_product(product, name).then(async () => {
-//             return res.status(200).json({
-//                 message: "Product updated successfully",
-//                 status: 1
-//             });
-//         }).catch(err => {
-//             next(err);
-//         });
-//     } catch (err) {
-//         const error = new Error(err);
-//         next(error);
-//     }
-// };
+        await orderModel.update_order_status(data).then(async () => {
+            return res.status(200).json({
+                message: "Order status updated successfully",
+                status: 1
+            });
+        }).catch(err => {
+            next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }
+};
 
+exports.get_orders = async (req, res, next) => {
+    try {
+        orderModel.get_orders(req.params.order_status).then(async (data) => {
+            return res.status(200).json({
+                message: "Product fetch successfully",
+                data: data,
+                status: 1
+            });
+        }).catch(err => {
+            next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }
+};
 
-
-// exports.get_product_list = async (req, res, next) => {
-//     try {
-//         productModel.get_product_list().then(async (data) => {
-//             return res.status(200).json({
-//                 message: "Product fetch successfully",
-//                 data: data,
-//                 status: 1
-//             });
-//         }).catch(err => {
-//             next(err);
-//         });
-//     } catch (err) {
-//         const error = new Error(err);
-//         next(error);
-//     }
-// };
-
-// exports.user_order_checkout = async (req, res, next) => {
-//     try {
-//         const {
-//            products
-//         } = req.value.body;
-//         let total = 0;
-//         for (let i in products) {
-// 		console.log(products[i]);
-//              const product = await productModel.get_product_details(products[i].id);
-// 		console.log(product[0]);
-//              total += product[0].price * products[i].quantity;
-//         }
-//         const order = {
-//             user_id: req.user.id,
-//             products: JSON.stringify(products),
-//             total_price: total,
-//             status: "Pending",
-//             paid: 0
-//         };
-//         await orderModel.checkout_order(order).then(async data => {
-//                return res.status(200).json({
-//                    message: "Your order successfully checkout",
-//                    totla: total,
-//                    orderID: data.insertId,
-//                    status: 1
-//                });
-//         }).catch(err => {
-//             next(err);
-//         })
-//     } catch (err) {
-//         const error = new Error(err);
-//         next(error);
-//     }
-// };
-
-
+exports.check_order = (req, res, next) => {
+    const { product_details, address_pincode } = req.body
+    let data = {
+        products: [],
+        delivery_charge: 0,
+        total: 0,
+    }
+    function get_delivery_charge() {
+        switch (address_pincode) {
+            case '742101':
+                return 25
+            case '742102':
+                return 30
+            case '742103':
+                return 30
+            default:
+                return 0;
+        }
+    }
+    product_details.forEach(async (e, i) => {
+        try {
+            const price = await orderModel.get_product_prize(e.product_id)
+            data.products.push({
+                ...e,
+                price: price,
+                sub_total: price * e.quantity
+            })
+            if (product_details.length === i+1) {
+                const result = {
+                    ...data,
+                    delivery_charge: get_delivery_charge(),
+                    total : data.products.reduce((acc, cur) => acc + cur.sub_total, 0) + get_delivery_charge()
+                }
+                res.send(result)
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+};
 
 
 
