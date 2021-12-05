@@ -106,7 +106,7 @@ exports.get_orders = async (req, res, next) => {
     }
 };
 
-exports.check_order = (req, res, next) => {
+exports.check_order = async (req, res, next) => {
     const { product_details, address_pincode } = req.body
     let data = {
         products: [],
@@ -125,13 +125,18 @@ exports.check_order = (req, res, next) => {
                 return 0;
         }
     }
-    product_details.forEach(async (e, i) => {
-        try {
-            const price = await orderModel.get_product_prize(e.product_id)
+    try {
+        const price = await orderModel.get_product_prize(product_details)
+        product_details.forEach(async (e, i) => {
+            if (!price[i]) {
+                return res.status(400).json({
+                    message: `Product ${product_details[i].product_id} not found`,
+                })
+            }
             data.products.push({
                 ...e,
-                price: price,
-                sub_total: price * e.quantity
+                price: price[i].price,
+                sub_total: price[i].price * e.quantity
             })
             if (product_details.length === i+1) {
                 const result = {
@@ -141,10 +146,10 @@ exports.check_order = (req, res, next) => {
                 }
                 res.send(result)
             }
-        } catch (error) {
-            reject(error)
-        }
-    })
+        })
+    } catch (error) {
+        next(error)
+    }
 };
 
 exports.check_status = (req, res, next) => {

@@ -44,17 +44,16 @@ exports.get_orders = async (status) => {
     });
 };
 
-exports.get_product_prize = async (id) => {
+exports.get_product_prize = async (products) => {
+    const condition = products.reduce((a, c) => { return a + ',' + c.product_id }, products[0].product_id)
+    let query = `SELECT price FROM tbl_products WHERE id in (${condition})`;
     return new Promise((resolve, reject) => {
-        let query = 'SELECT price FROM tbl_products WHERE id = ?';
-        let value = [id];
-        db.query(query, value, (err, result) => {
+        db.query(query, (err, result) => {
             if (err) {
                 const error = new Error(err);
                 reject(error);
             } else {
-                const price = result[0] && result[0].price;
-                resolve(price);
+                resolve(result);
             }
         })
     });
@@ -95,7 +94,6 @@ exports.update_order_status = async (data) => {
 exports.check_status = async (req) => {
     const condition = req.reduce((a, c) => { return a + ',' + c.id }, req[0].id)
     let query = `SELECT order_status FROM tbl_order WHERE id in (${condition})`;
-    console.log(query);
     return new Promise((resolve, reject) => {
         db.query(query, (err, result) => {
             if (err) {
