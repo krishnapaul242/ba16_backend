@@ -7,6 +7,7 @@ exports.add_order = async (order, product) => {
         let query_order = 'INSERT INTO tbl_order SET ?';
         let value_order = [order];
         db.query(query_order, value_order, (err, result) => {
+            console.log(result);
             if (err) {
                 const error = new Error(err);
                 reject(error);
@@ -84,6 +85,22 @@ exports.update_order_status = async (data) => {
             if (err) {
               const error = new Error(err);
               reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    });
+};
+
+exports.check_status = async (req) => {
+    const condition = req.reduce((a, c) => { return a + ',' + c.id }, req[0].id)
+    let query = `SELECT order_status FROM tbl_order WHERE id in (${condition})`;
+    console.log(query);
+    return new Promise((resolve, reject) => {
+        db.query(query, (err, result) => {
+            if (err) {
+                const error = new Error(err);
+                reject(error);
             } else {
                 resolve(result);
             }

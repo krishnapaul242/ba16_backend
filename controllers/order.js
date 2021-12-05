@@ -147,6 +147,19 @@ exports.check_order = (req, res, next) => {
     })
 };
 
-
-
-
+exports.check_status = (req, res, next) => {
+    try {
+        orderModel.check_status(req.body).then(async (data) => {
+            return res.status(200).json({
+                message: "Orders fetched successfully",
+                data: data,
+                status: 1
+            });
+        }).catch(err => {
+            next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }   
+}
