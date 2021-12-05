@@ -6,24 +6,22 @@ exports.add_order = async (order, product) => {
     return new Promise((resolve, reject) => {
         let query_order = 'INSERT INTO tbl_order SET ?';
         let value_order = [order];
-        db.query(query_order, value_order, (err, result) => {
-            console.log(result);
+        db.query(query_order, value_order, (err, orderInfo) => {
             if (err) {
                 const error = new Error(err);
                 reject(error);
             } else {
-                let query_product = 'INSERT INTO tbl_ordered_products SET ?';
-                product.forEach(element => {
-                    let value_product = [{...element, order_id: order.id}];
-                    db.query(query_product, value_product, (err, result) => {
-                        if (err) {
-                          db.query('DELETE FROM tbl_order WHERE id = ?', [order.id])
-                          const error = new Error(err);
-                          reject(error);
-                        } else {
-                          resolve(result);
-                        }
-                    })
+                let keys = Object.keys(product[0]);
+                let values = product.map( obj => keys.map( key => obj[key]));
+                let query_product = `INSERT INTO tbl_ordered_products (${keys.join(', ')}) VALUES ?`;
+                db.query(query_product, [values], (err, result) => {
+                    if (err) {
+                        db.query('DELETE FROM tbl_order WHERE id = ?', [order.id])
+                        const error = new Error(err);
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
                 })
             }
         })

@@ -38,10 +38,10 @@ exports.add_order = async (req, res, next) => {
             user_name,
             user_phone
         };
-        // console.log(order)
-        await orderModel.add_order(order, ordered_products).then(async () => {
+        await orderModel.add_order(order, ordered_products).then(async (order) => {
             return res.status(200).json({
                 message: "Your Order Submitted Successfully",
+                orderd_id: UID,
                 status: 1
             });
         }).catch(err => {
