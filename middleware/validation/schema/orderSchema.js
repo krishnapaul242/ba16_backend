@@ -36,10 +36,12 @@ module.exports = {
       user_phone: string(),
     }),
     payment_status: joi.object({
-      payment_status: joi.string().required(),
+      id: number(),
+      payment_status: joi.string().valid('ta', 'hd').required(),
     }),
     order_status: joi.object({
-      order_status: joi.string().required(),
+      id: number(),
+      order_status: joi.string().valid('req','pro','ofd','con').required(),
     }),
     check_order: joi.object({
       product_details: joi.array().items(

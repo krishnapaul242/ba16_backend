@@ -17,6 +17,7 @@ const productRouter = require('./routes/product');
 const feedRouter = require('./routes/feed');
 const orderRouter = require('./routes/order');
 const offerRouter = require('./routes/offer');
+const bookingRoute = require('./routes/booking');
 
 
 
@@ -51,6 +52,7 @@ app.use('/api/product', productRouter);
 app.use('/api/feed', feedRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/offer', offerRouter);
+app.use('/api/booking', bookingRoute);
 
 
 
