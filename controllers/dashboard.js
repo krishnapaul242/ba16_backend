@@ -11,8 +11,8 @@ exports.getStatistics = (req, res, next) => {
     }
     let queryOrders = 'SELECT * FROM tbl_order';
     let queryBookings = 'SELECT COUNT(*) as number FROM tbl_bookings';
-    let queryProducts = 'SELECT COUNT(*) FROM tbl_products';
-    let queryUsers = 'SELECT COUNT(*) FROM tbl_users';
+    let queryProducts = 'SELECT COUNT(*) as number FROM tbl_products';
+    let queryUsers = 'SELECT COUNT(*) as number FROM tbl_users';
     db.query(queryOrders, (err, result) => {
         if (err) {
             return res.status(500).json({
