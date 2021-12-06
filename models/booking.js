@@ -60,3 +60,18 @@ exports.change_status = async (req) => {
         })
     });
 };
+
+exports.check_status = async (req) => {
+    const condition = req.reduce((a, c) => { return a + ',' + c.id }, req[0].id)
+    let query = `SELECT id, booking_status FROM tbl_bookings WHERE id in (${condition})`;
+    return new Promise((resolve, reject) => {
+        db.query(query, (err, result) => {
+            if (err) {
+                const error = new Error(err);
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    });
+};

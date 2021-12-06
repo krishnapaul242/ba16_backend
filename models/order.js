@@ -91,7 +91,7 @@ exports.update_order_status = async (data) => {
 
 exports.check_status = async (req) => {
     const condition = req.reduce((a, c) => { return a + ',' + c.id }, req[0].id)
-    let query = `SELECT order_status FROM tbl_order WHERE id in (${condition})`;
+    let query = `SELECT id, order_status FROM tbl_order WHERE id in (${condition})`;
     return new Promise((resolve, reject) => {
         db.query(query, (err, result) => {
             if (err) {

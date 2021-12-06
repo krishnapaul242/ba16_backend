@@ -40,3 +40,20 @@ exports.change_status = async (req, res, next) => {
         next(error);
     });
 };
+
+exports.check_status = (req, res, next) => {
+    try {
+        bookingModel.check_status(req.body).then(async (data) => {
+            return res.status(200).json({
+                message: "Bookings fetched successfully",
+                data: data,
+                status: 1
+            });
+        }).catch(err => {
+            next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }   
+}

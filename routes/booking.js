@@ -8,6 +8,6 @@ const router = express.Router();
 router.route('/:status').get(isAdminAuthenticated, bookingController.get_bookings );
 router.route('/').post(isUserAuthenticated, validateBody(booking_schema), bookingController.add_booking);
 router.route('/change_status').put(isAdminAuthenticated, validateBody(change_booking_status), bookingController.change_status);
-// router.route('/check_status').get(isUserAuthenticated, bookingController.check_status);
+router.route('/check_status').post(isUserAuthenticated, bookingController.check_status);
 
 module.exports = router;
