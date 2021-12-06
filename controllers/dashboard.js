@@ -10,9 +10,9 @@ exports.getStatistics = (req, res, next) => {
         total_poducts: 0,
     }
     let queryOrders = 'SELECT * FROM tbl_order';
-    let queryBookings = 'SELECT * FROM tbl_bookings';
-    let queryProducts = 'SELECT * FROM tbl_products';
-    let queryUsers = 'SELECT * FROM tbl_users';
+    let queryBookings = 'SELECT COUNT(*) as number FROM tbl_bookings';
+    let queryProducts = 'SELECT COUNT(*) FROM tbl_products';
+    let queryUsers = 'SELECT COUNT(*) FROM tbl_users';
     db.query(queryOrders, (err, result) => {
         if (err) {
             return res.status(500).json({
@@ -35,7 +35,7 @@ exports.getStatistics = (req, res, next) => {
                 status: 0
             })
         }
-        data.total_bookings = result.length;
+        data.total_bookings = result[0].number;
     })
     db.query(queryProducts, (err, result) => {
         if (err) {
@@ -44,7 +44,7 @@ exports.getStatistics = (req, res, next) => {
                 status: 0
             })
         }
-        data.total_poducts = result.length;
+        data.total_poducts = result[0].number;
     })
     db.query(queryUsers, (err, result) => {
         if (err) {
@@ -53,7 +53,7 @@ exports.getStatistics = (req, res, next) => {
                 status: 0
             })
         }
-        data.total_users = result.length;
+        data.total_users = result[0].number;
         return res.status(200).json({
             message: 'Success',
             data: data,
