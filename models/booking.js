@@ -35,6 +35,9 @@ exports.add_booking = async (req) => {
 exports.get_booking = async (status) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_bookings WHERE booking_status = '${status}'`;
+        if (status === "com") {
+            query = query + ' AND DATE(updated_at) = CURDATE()';
+        }
         db.query(query, (err, result) => {
             if (err) {
               const error = new Error(err);

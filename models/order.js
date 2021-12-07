@@ -1,5 +1,4 @@
 const db = require('../configuration/dbConn');
-const config = require('../configuration/config');
 
 
 exports.add_order = async (order, product) => {
@@ -31,6 +30,9 @@ exports.add_order = async (order, product) => {
 exports.get_orders = async (status) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`;
+        if (status === "com") {
+            query = query + ' AND DATE(updated_at) = CURDATE()';
+        }
         db.query(query, (err, result) => {
             if (err) {
                 const error = new Error(err);

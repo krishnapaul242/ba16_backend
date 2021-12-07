@@ -15,5 +15,9 @@ module.exports = {
     change_booking_status: joi.object({
         id: number(),
         booking_status: joi.string().valid("req", "app", "can", "com").required(),
+    }),
+    change_booking_status_user: joi.object({
+        id: number(),
+        booking_status: joi.string().valid("can").required(),
     })
 };

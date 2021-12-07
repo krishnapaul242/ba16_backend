@@ -43,6 +43,10 @@ module.exports = {
       id: number(),
       order_status: joi.string().valid('req','pro','ofd','com','can').required(),
     }),
+    order_status_user: joi.object({
+      id: number(),
+      order_status: joi.string().valid('can').required(),
+    }),
     check_order: joi.object({
       product_details: joi.array().items(
         joi.object({

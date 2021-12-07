@@ -49,7 +49,7 @@ exports.getStatistics = (req, res, next) => {
 
 exports.getChart = (req, res, next) => {
     const data = []
-    let query = 'SELECT created_at FROM tbl_order WHERE DATE(`created_at`) = CURDATE() - INTERVAL 3 DAY';
+    let query = 'SELECT created_at FROM tbl_order WHERE DATE(`created_at`) = CURDATE()';
     db.query(query, (err, result) => {
         if (err) {
             return res.status(500).json({
