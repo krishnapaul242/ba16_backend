@@ -63,7 +63,8 @@ exports.getChart = (req, res, next) => {
             })
         }
         const formatedData = result.map(item => {
-            const time = parseInt(moment(item.created_at).add(6, 'hours').add(30, 'minutes').format('HH'))
+            const time = parseInt(moment(item.created_at).add(5, 'hours').add(30, 'minutes').format('HH'))
+            console.log(time, item);
             return time < 12 ? time + 'am' : (time - 12) + 'pm'
         })
         // formatedData.forEach(item => {
@@ -77,7 +78,6 @@ exports.getChart = (req, res, next) => {
         //         })
         //     }
         // })
-        // console.log(formatedData);
         times.forEach(time => {
             const orderNumber = formatedData.filter(a => a === time).length
             data.push({
