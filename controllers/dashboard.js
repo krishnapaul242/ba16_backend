@@ -72,6 +72,10 @@ exports.getChart = (req, res, next) => {
                 })
             }
         })
-        console.log(data);
+        return res.status(200).json({
+            message: 'Success',
+            data: data,
+            status: 1
+        })
     })
 }
