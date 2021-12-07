@@ -4,7 +4,7 @@ const dashboardController = require('../controllers/dashboard');
 
 const router = express.Router();
 
-router.route('/statistics').get(dashboardController.getStatistics);
-// router.route('/chart').delete(isAdminAuthenticated, dashboardController.getChart);
+router.route('/statistics').get(isAdminAuthenticated, dashboardController.getStatistics);
+router.route('/chart').get(isAdminAuthenticated, dashboardController.getChart);
 
 module.exports = router;

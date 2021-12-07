@@ -1,4 +1,5 @@
 const db = require('../configuration/dbConn');
+const moment = require('moment');
 
 exports.getStatistics = (req, res, next) => {
     const data = {
@@ -45,3 +46,32 @@ exports.getStatistics = (req, res, next) => {
         })
     })
 };
+
+exports.getChart = (req, res, next) => {
+    const data = []
+    let query = 'SELECT created_at FROM tbl_order WHERE DATE(`created_at`) = CURDATE() - INTERVAL 3 DAY';
+    db.query(query, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Error',
+                status: 0
+            })
+        }
+        const formatedData = result.map(item => {
+            const time = parseInt(moment(item.created_at).format('HH'))
+            return time < 12 ? time + 'am' : (time - 12) + 'PM'
+        })
+        formatedData.forEach(item => {
+            const exist = data.find(a => a.time === item)
+            if(exist){
+                exist.order += 1
+            }else{
+                data.push({
+                    time: item,
+                    order: 1,
+                })
+            }
+        })
+        console.log(data);
+    })
+}
