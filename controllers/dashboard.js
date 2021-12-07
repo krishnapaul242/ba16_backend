@@ -10,9 +10,9 @@ exports.getStatistics = (req, res, next) => {
         total_poducts: 0,
     }
     let queryOrders = 'SELECT * FROM tbl_order';
-    let queryBookings = 'SELECT COUNT(*) as number FROM tbl_bookings';
-    let queryProducts = 'SELECT COUNT(*) as number FROM tbl_products';
-    let queryUsers = 'SELECT COUNT(*) as number FROM tbl_users';
+    let countQuery = `SELECT 'user' AS name, COUNT(*) AS number FROM tbl_users UNION
+                      SELECT 'product',      COUNT(*)           FROM tbl_products UNION
+                      SELECT 'booking',      COUNT(*)           FROM tbl_bookings;`
     db.query(queryOrders, (err, result) => {
         if (err) {
             return res.status(500).json({
@@ -28,32 +28,16 @@ exports.getStatistics = (req, res, next) => {
         data.cenceled_orders = canceled_order.length
         data.total_order = result.length;
     })
-    db.query(queryBookings, (err, result) => {
+    db.query(countQuery, (err, result) => {
         if (err) {
             return res.status(500).json({
                 message: 'Error',
                 status: 0
             })
         }
-        data.total_bookings = result[0].number;
-    })
-    db.query(queryProducts, (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Error',
-                status: 0
-            })
-        }
-        data.total_poducts = result[0].number;
-    })
-    db.query(queryUsers, (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Error',
-                status: 0
-            })
-        }
-        data.total_users = result[0].number;
+        data.total_bookings = result.find(a=> a.name === "user").number;
+        data.total_poducts = result.find(a=> a.name === "product").number;
+        data.total_users = result.find(a=> a.name === "booking").number;
         return res.status(200).json({
             message: 'Success',
             data: data,
