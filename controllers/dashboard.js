@@ -49,7 +49,12 @@ exports.getStatistics = (req, res, next) => {
 
 exports.getChart = (req, res, next) => {
     const data = []
-    let query = 'SELECT created_at FROM tbl_order WHERE DATE(`created_at`) = CURDATE()';
+    const times = ["9am", "10am", "11am", "12am", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm", "9pm"]
+    let days = req.params.days
+    if (isNaN(days) || req.params.days === "") {
+        days = 0
+    }
+    let query = `SELECT created_at FROM tbl_order WHERE DATE(created_at) = CURDATE() + INTERVAL ${days} DAY`;
     db.query(query, (err, result) => {
         if (err) {
             return res.status(500).json({
@@ -58,19 +63,27 @@ exports.getChart = (req, res, next) => {
             })
         }
         const formatedData = result.map(item => {
-            const time = parseInt(moment(item.created_at).format('HH'))
-            return time < 12 ? time + 'am' : (time - 12) + 'PM'
+            const time = parseInt(moment(item.created_at).add(6, 'hours').add(30, 'minutes').format('HH'))
+            return time < 12 ? time + 'am' : (time - 12) + 'pm'
         })
-        formatedData.forEach(item => {
-            const exist = data.find(a => a.time === item)
-            if(exist){
-                exist.order += 1
-            }else{
-                data.push({
-                    time: item,
-                    order: 1,
-                })
-            }
+        // formatedData.forEach(item => {
+        //     const exist = data.find(a => a.time === item)
+        //     if(exist){
+        //         exist.order += 1
+        //     }else{
+        //         data.push({
+        //             time: item,
+        //             order: 1,
+        //         })
+        //     }
+        // })
+        // console.log(formatedData);
+        times.forEach(time => {
+            const orderNumber = formatedData.filter(a => a === time).length
+            data.push({
+                time: time,
+                order: orderNumber,
+            })
         })
         return res.status(200).json({
             message: 'Success',
