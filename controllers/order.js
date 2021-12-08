@@ -109,7 +109,7 @@ exports.get_orders = async (req, res, next) => {
     try {
         orderModel.get_orders(req.params.order_status).then(async (data) => {
             return res.status(200).json({
-                message: "Product fetch successfully",
+                message: "Orders fetched successfully",
                 data: data,
                 status: 1
             });
@@ -127,7 +127,7 @@ exports.get_orders_user = async (req, res, next) => {
     try {
         orderModel.get_orders_user(id).then(async (data) => {
             return res.status(200).json({
-                message: "Product fetch successfully",
+                message: "Orders fetched successfully",
                 data: data,
                 status: 1
             });
