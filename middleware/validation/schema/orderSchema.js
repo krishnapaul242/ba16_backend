@@ -4,7 +4,9 @@ const config = require('../../../configuration/config');
 const { validEmailAddress, validPhoneNumber } = require("../../../shared/helpers");
 
 const string = () => (joi.string().required())
+const stringOptional = () => (joi.string().optional().allow(''))
 const number = () => (joi.number().required())
+const numberOptional = () => (joi.string().optional().allow(''))
 
 module.exports = {
     product_order: joi.object({
@@ -19,19 +21,19 @@ module.exports = {
       delivery_charge: number(),
       total: number(),
       address: {
-          line1: joi.string().optional(),
-          line2: joi.string().optional(),
-          landmark: joi.string().optional(),
-          city: joi.string().optional(),
-          district: joi.string().optional(),
-          state: joi.string().optional(),
-          pincode: joi.string().optional()
+          line1: stringOptional(),
+          line2: stringOptional(),
+          landmark: stringOptional(),
+          city: stringOptional(),
+          district: stringOptional(),
+          state: stringOptional(),
+          pincode: stringOptional()
       },
-      order_type: joi.string().optional(),
+      order_type: stringOptional(),
       order_status: joi.string().valid('req','pro','ofd','com').required(),
       payment_status: joi.string().valid('ta','hd').required(),
-      payment_comment: joi.string().optional(),
-      user_id: joi.number().optional(),
+      payment_comment: stringOptional(),
+      user_id: joi.number(),
       user_name: string(),
       user_phone: string(),
     }),
