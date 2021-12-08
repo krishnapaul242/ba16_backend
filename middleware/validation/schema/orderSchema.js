@@ -19,13 +19,13 @@ module.exports = {
       delivery_charge: number(),
       total: number(),
       address: {
-          line1: string(),
-          line2: string(),
-          landmark: string(),
-          city: string(),
-          district: string(),
-          state: string(),
-          pincode: string()
+          line1: joi.string(),
+          line2: joi.string(),
+          landmark: joi.string(),
+          city: joi.string(),
+          district: joi.string(),
+          state: joi.string(),
+          pincode: joi.string()
       },
       order_type: string(),
       order_status: joi.string().valid('req','pro','ofd','com').required(),
