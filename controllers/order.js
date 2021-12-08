@@ -122,6 +122,24 @@ exports.get_orders = async (req, res, next) => {
     }
 };
 
+exports.get_orders_user = async (req, res, next) => {
+    const { id } = req.user;
+    try {
+        orderModel.get_orders_user(id).then(async (data) => {
+            return res.status(200).json({
+                message: "Product fetch successfully",
+                data: data,
+                status: 1
+            });
+        }).catch(err => {
+            next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }
+};
+
 exports.check_order = async (req, res, next) => {
     const { product_details, address_pincode } = req.body
     let data = {

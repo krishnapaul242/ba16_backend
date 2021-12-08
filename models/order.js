@@ -44,6 +44,20 @@ exports.get_orders = async (status) => {
     });
 };
 
+exports.get_orders_user = async (id) => {
+    return new Promise((resolve, reject) => {
+        let query = `SELECT * FROM tbl_order WHERE order_status = 'req' AND user_id = ${id}`;
+        db.query(query, (err, result) => {
+            if (err) {
+                const error = new Error(err);
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    });
+};
+
 exports.get_product_prize = async (products) => {
     const condition = products.reduce((a, c) => { return a + ',' + c.product_id }, products[0].product_id)
     let query = `SELECT price FROM tbl_products WHERE id in (${condition})`;
