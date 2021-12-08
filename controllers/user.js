@@ -136,6 +136,7 @@ exports.user_signin = async (req, res, next) => {
 exports.get_user_profile = async (req, res, next) => {
     try {
         const {
+            id,
             name,
             email,
             mobile_no,
@@ -144,6 +145,7 @@ exports.get_user_profile = async (req, res, next) => {
         } = req.user;
         const img_url = profile_image ? config.API_DETAILS.URL + path.join(config.FILE.USER_PROFILE_IMAGE.PATH, profile_image) : "";
         const user = {
+            id: encode(id),
             name: decode(name),
             email: decode(email),
             mobile_no: decode(mobile_no),
