@@ -91,6 +91,33 @@ exports.update_order_status = async (data) => {
     });
 };
 
+exports.update_order_status_user = async (data) => {
+    const {id, order_status} = data;
+    return new Promise((resolve, reject) => {
+        let querySearch = 'SELECT order_status FROM tbl_order WHERE  id = ?';
+        let queryUpdate = 'UPDATE tbl_order SET ? WHERE  id = ?';
+        let value = [{order_status}, id];
+
+        db.query(querySearch, [id], (err, result) => {
+            if (err || result[0].order_status !== "req") {
+                reject({
+                    message: err || "In Progress Order Can't Be Cancelled",
+                    status: 0
+                });
+            } else {
+                db.query(queryUpdate, value, (err, result) => {
+                    if (err) {
+                      const error = new Error(err);
+                      reject(error);
+                    } else {
+                      resolve(result);
+                    }
+                })
+            }
+        })
+    });
+};
+
 exports.check_status = async (req) => {
     const condition = req.reduce((a, c) => { return a + ',' + c.id }, req[0].id)
     let query = `SELECT id, order_status FROM tbl_order WHERE id in (${condition})`;

@@ -9,7 +9,7 @@ const router = express.Router();
 router.route('/').post(isUserAuthenticated, validateBody(product_order), orderController.add_order);
 router.route('/check_order').post(isUserAuthenticated, validateBody(check_order), orderController.check_order);
 router.route('/order_status').put(isAdminAuthenticated, validateBody(order_status), orderController.update_order_status);
-router.route('/order_status/user').put(isUserAuthenticated, validateBody(order_status_user), orderController.update_order_status);
+router.route('/order_status/user').put(isUserAuthenticated, validateBody(order_status_user), orderController.update_order_status_user);
 router.route('/payment_status').put(isAdminAuthenticated, validateBody(payment_status),  orderController.update_payment_status);
 router.route('/:order_status').get(isAdminAuthenticated, orderController.get_orders);
 router.route('/check_status').post(isUserAuthenticated, orderController.check_status);

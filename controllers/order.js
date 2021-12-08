@@ -74,7 +74,6 @@ exports.update_payment_status = async (req, res, next) => {
 exports.update_order_status = async (req, res, next) => {
     try {
         const data = req.body;
-
         await orderModel.update_order_status(data).then(async () => {
             return res.status(200).json({
                 message: "Order status updated successfully",
@@ -82,6 +81,23 @@ exports.update_order_status = async (req, res, next) => {
             });
         }).catch(err => {
             next(err);
+        });
+    } catch (err) {
+        const error = new Error(err);
+        next(error);
+    }
+};
+
+exports.update_order_status_user = async (req, res, next) => {
+    try {
+        const data = req.body;
+        await orderModel.update_order_status_user(data).then(async () => {
+            return res.status(200).json({
+                message: "Order Cancelled",
+                status: 1
+            });
+        }).catch(err => {
+            return res.status(500).json(err);
         });
     } catch (err) {
         const error = new Error(err);
