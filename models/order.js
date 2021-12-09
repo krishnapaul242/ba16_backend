@@ -45,7 +45,7 @@ exports.get_orders = async (status) => {
     });
 };
 
-exports.get_orders_user = async (id) => {
+exports.get_orders_user = async (id = 1) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_order WHERE order_status != 'can' AND user_id = ${id} ORDER BY DATE(created_at) DESC;`
         db.query(query, (err, order) => {

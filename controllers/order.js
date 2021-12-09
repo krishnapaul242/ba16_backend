@@ -38,7 +38,14 @@ exports.add_order = async (req, res, next) => {
             user_name,
             user_phone
         };
-        await orderModel.add_order(order, ordered_products).then(async (order) => {
+        const products = ordered_products.reduce((acc, cur) => {
+            acc.push({
+                ...cur,
+                order_id: UID,
+            });
+            return acc;
+        }, []);
+        await orderModel.add_order(order, products).then(async (order) => {
             return res.status(200).json({
                 message: "Your Order Submitted Successfully",
                 orderd_id: UID,
