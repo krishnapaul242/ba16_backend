@@ -33,13 +33,12 @@ exports.get_orders = async (status) => {
         if (status === "com") {
             query = query + ' AND DATE(updated_at) = CURDATE()';
         }
-        const sort = ' ORDER BY DATE(created_at) DESC'
-        db.query(query+sort, (err, result) => {
+        db.query(query, (err, result) => {
             if (err) {
                 const error = new Error(err);
                 reject(error);
             } else {
-                resolve(result);
+                resolve(result.reverse());
             }
         })
     });
@@ -47,7 +46,7 @@ exports.get_orders = async (status) => {
 
 exports.get_orders_user = async (id = 1) => {
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM tbl_order WHERE order_status != 'can' AND user_id = ${id} ORDER BY DATE(created_at) DESC;`
+        let query = `SELECT * FROM tbl_order WHERE order_status != 'can' AND user_id = ${id};`
         db.query(query, (err, order) => {
             if (err) {
                 const error = new Error(err);
@@ -64,7 +63,7 @@ exports.get_orders_user = async (id = 1) => {
                             order.products = result.filter(product => product.order_id === order.id)
                             data.push(order)
                         })
-                        resolve(data);
+                        resolve(data.reverse());
                     }
                 })
             }
