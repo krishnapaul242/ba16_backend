@@ -123,6 +123,7 @@ exports.get_orders = async (req, res, next) => {
 };
 
 exports.get_orders_user = async (req, res, next) => {
+    // const id = 1
     const { id } = req.user;
     try {
         orderModel.get_orders_user(id).then(async (data) => {
@@ -160,7 +161,7 @@ exports.check_order = async (req, res, next) => {
         }
     }
     try {
-        const price = await orderModel.get_product_prize(product_details)
+        const price = await orderModel.get_product_price(product_details)
         product_details.forEach(async (e, i) => {
             if (!price[i]) {
                 return res.status(400).json({
