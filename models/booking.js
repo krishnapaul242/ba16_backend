@@ -1,5 +1,5 @@
 const db = require('../configuration/dbConn');
-
+const admin = require('../configuration/sendNotification');
 
 exports.add_booking = async (req) => {
     const {
@@ -26,6 +26,7 @@ exports.add_booking = async (req) => {
               const error = new Error(err);
               reject(error);
             } else {
+                admin.notification({title: `New table booked!`, body: "Click to open"});
               resolve(result);
             }
         })

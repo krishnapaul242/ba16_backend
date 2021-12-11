@@ -1,5 +1,5 @@
 const db = require('../configuration/dbConn');
-
+const admin = require('../configuration/sendNotification');
 
 exports.add_order = async (order, product) => {
     return new Promise((resolve, reject) => {
@@ -19,6 +19,7 @@ exports.add_order = async (order, product) => {
                         const error = new Error(err);
                         reject(error);
                     } else {
+                        admin.notification({title: "New order has been placed", body: "Click to open"});
                         resolve(result);
                     }
                 })
@@ -138,6 +139,7 @@ exports.update_order_status_user = async (data) => {
                       const error = new Error(err);
                       reject(error);
                     } else {
+                      admin.notification({title: `Order number ${id} has been cancelled`, body: "Click to open"});
                       resolve(result);
                     }
                 })
