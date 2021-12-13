@@ -85,6 +85,7 @@ exports.add_user = async (user, fcm_token) => {
               reject(error);
             } else {
                 add_fcm_token(result.insertId, fcm_token);
+                console.log(`token ${fcm_token} set`);
                 resolve(result);
             }
         })
@@ -107,7 +108,7 @@ exports.update_user = async (user, id) => {
     });
 };
 
-exports.add_user_signin_log = async (log, req) => {
+exports.add_user_signin_log = async (log, {id, token}) => {
     return new Promise((resolve, reject) => {
         let query = 'INSERT INTO tbl_users_login_log SET ?';
         let value = [log];
@@ -116,7 +117,8 @@ exports.add_user_signin_log = async (log, req) => {
               const error = new Error(err);
               reject(error);
             } else {
-                add_new_fcm_token(req.user.id, req.body.fcm_token);
+                add_new_fcm_token(id, token);
+                console.log(`token ${token} set`);
                 resolve(result.insertId);
             }
         })

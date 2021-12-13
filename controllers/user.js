@@ -89,7 +89,7 @@ exports.user_sign_up_confirmation = async (req, res, next) => {
             request_ip: encode(ip.address()),
             login_time: encode(get_current_date_time())
         };
-        await userModel.add_user_signin_log(log);
+        await userModel.add_user_signin_log(log, {id: userId.insertId, token: req.body.fcm_token});
         return res.status(200).json({
             message: "Signup Successful",
             token: generate_user_jwt(userId.insertId, req.get("User-Agent")),
@@ -112,7 +112,7 @@ exports.user_signin = async (req, res, next) => {
                 request_ip: encode(ip.address()),
                 login_time: encode(get_current_date_time())
             };
-            await userModel.add_user_signin_log(log, req).then(() => {
+            await userModel.add_user_signin_log(log, {id: req.user.id, token: req.body.fcm_token}).then(() => {
                 return res.status(200).json({
                     message: "Signin Successful",
                     token: generate_user_jwt(req.user.id, req.get("User-Agent")),
