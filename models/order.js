@@ -105,6 +105,7 @@ exports.update_payment_status = async (data) => {
 };
 
 exports.update_order_status = async (data) => {
+    const token = "cJi7diY7SkGWoZN3_U_KEP:APA91bG42f4nDXULm-gstqs8kTcU21TKA2-PHjN15VD6d3A-TUbpyuuNE4ZNyiWh2hqJmyUzax3z6mbuKYFFlYEa5qPrNwHKQKslNoVC7ETAP5maMTiEsdj6PfI0-6cFxHoTPcKlfCHE";
     const {id, order_status} = data;
     return new Promise((resolve, reject) => {
         let query = 'UPDATE tbl_order SET ? WHERE  id = ?';
@@ -114,6 +115,7 @@ exports.update_order_status = async (data) => {
               const error = new Error(err);
               reject(error);
             } else {
+                admin.notificationTo({title: `Your order status changed`, body: "Click to open", token:token});
                 resolve(result);
             }
         })

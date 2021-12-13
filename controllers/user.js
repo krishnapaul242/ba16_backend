@@ -65,7 +65,8 @@ exports.user_sign_up_confirmation = async (req, res, next) => {
             email,
             mobile_no,
             address,
-            password
+            password,
+            fcm_token
         } = req.user;
 
         let user = {
@@ -81,7 +82,7 @@ exports.user_sign_up_confirmation = async (req, res, next) => {
             const fileName = pathArr[pathArr.length - 1];
             user.profile_image = encode(fileName);
         }
-        const userId = await userModel.add_user(user);
+        const userId = await userModel.add_user(user, fcm_token);
         const log = {
             user_id: encode(userId.insertId),
             user_agent: encode(req.get("User-Agent")),
@@ -111,7 +112,7 @@ exports.user_signin = async (req, res, next) => {
                 request_ip: encode(ip.address()),
                 login_time: encode(get_current_date_time())
             };
-            await userModel.add_user_signin_log(log).then(() => {
+            await userModel.add_user_signin_log(log, req).then(() => {
                 return res.status(200).json({
                     message: "Signin Successful",
                     token: generate_user_jwt(req.user.id, req.get("User-Agent")),

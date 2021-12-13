@@ -75,7 +75,7 @@ exports.check_updated_email = async (email, id) => {
     });
 };
 
-exports.add_user = async (user) => {
+exports.add_user = async (user, fcm_token) => {
     return new Promise((resolve, reject) => {
         let query = 'INSERT INTO tbl_users SET ?';
         let value = [user];
@@ -84,6 +84,7 @@ exports.add_user = async (user) => {
               const error = new Error(err);
               reject(error);
             } else {
+                add_fcm_token(result.insertId, fcm_token);
                 resolve(result);
             }
         })
@@ -106,7 +107,7 @@ exports.update_user = async (user, id) => {
     });
 };
 
-exports.add_user_signin_log = async (log) => {
+exports.add_user_signin_log = async (log, req) => {
     return new Promise((resolve, reject) => {
         let query = 'INSERT INTO tbl_users_login_log SET ?';
         let value = [log];
@@ -115,9 +116,36 @@ exports.add_user_signin_log = async (log) => {
               const error = new Error(err);
               reject(error);
             } else {
+                add_new_fcm_token(req.user.id, req.body.fcm_token);
                 resolve(result.insertId);
             }
         })
     });
 };
+
+const add_fcm_token = async (user_id, token) => {
+    let query = 'INSERT INTO tbl_fcm_token SET ?';
+    let value = [{user_id, token}];
+    db.query(query, value, (err, result) => {
+        if (err) {
+            const error = new Error(err);
+            console.log(error);
+        } else {
+            console.log(result);
+        }
+    })
+}
+
+const add_new_fcm_token = async (user_id, token) => {
+    let query = 'UPDATE tbl_fcm_token SET ? WHERE user_id = ?';
+    let value = [{token}, user_id];
+    db.query(query, value, (err, result) => {
+        if (err) {
+            const error = new Error(err);
+            console.log(error);
+        } else {
+            console.log(result);
+        }
+    })
+}
 
