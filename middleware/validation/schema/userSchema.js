@@ -41,6 +41,7 @@ module.exports = {
     user_signup_otp_verification_schema: joi.object({
         otp: joi.string().trim().min(4).max(4).regex(/^[0-9]+$/).required(),
         verificationKey: joi.string().trim().email().lowercase().required(),
+        fcm_token: joi.string().required()
     }),
     user_signin_schema: joi.object({
         username: joi.string().trim().required().custom((value, helper) => {
@@ -59,6 +60,7 @@ module.exports = {
             }
         }),
         password: joi.string().trim().max(8).min(4).required(),
+        fcm_token: joi.string().required(),
     }),
     user_update_profile_schema: joi.object({
         name: joi.string().trim().required(),
