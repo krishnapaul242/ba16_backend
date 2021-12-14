@@ -30,7 +30,7 @@ module.exports = {
           pincode: stringOptional()
       },
       order_type: stringOptional(),
-      order_status: joi.string().valid('req','pro','ofd','com').required(),
+      order_status: joi.string().valid('req','pre','ofd','com').required(),
       payment_status: joi.string().valid('ta','hd').required(),
       payment_comment: stringOptional(),
       user_id: joi.number(),
@@ -43,7 +43,7 @@ module.exports = {
     }),
     order_status: joi.object({
       id: number(),
-      order_status: joi.string().valid('req','pro','ofd','com','can').required(),
+      order_status: joi.string().valid('req','pre','ofd','com','can').required(),
     }),
     order_status_user: joi.object({
       id: number(),
