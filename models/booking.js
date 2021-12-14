@@ -44,7 +44,7 @@ exports.get_booking = async (status) => {
               const error = new Error(err);
               reject(error);
             } else {
-                resolve(result);
+                resolve(result.reverse());
             }
         })
     });
