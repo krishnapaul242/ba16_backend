@@ -51,7 +51,7 @@ exports.get_booking = async (status) => {
 };
 
 exports.change_status = async (req) => {
-    const offerStatus = {
+    const bookingStatus = {
         req: 'Requested',
         app: 'Approved',
         can: 'Cancelled',
@@ -65,12 +65,12 @@ exports.change_status = async (req) => {
               const error = new Error(err);
               reject(error);
             } else {
-                const query_fcm_token = `SELECT tbl_fcm_token.token FROM tbl_fcm_token JOIN tbl_offers ON tbl_fcm_token.user_id = tbl_offers.user_id WHERE tbl_offers.id = ${id}`;
+                const query_fcm_token = `SELECT tbl_fcm_token.token FROM tbl_fcm_token JOIN tbl_bookings ON tbl_fcm_token.user_id = tbl_bookings.user_id WHERE tbl_bookings.id = ${id}`;
                 db.query(query_fcm_token, (err, result) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        admin.notificationTo({title: `Your table is ${offerStatus[booking_status]}`, body: "Click to open", token: result[0].token});
+                        admin.notificationTo({title: `Your table is ${bookingStatus[booking_status]}`, body: "Click to open", token: result[0].token});
                     }
                 })
                 resolve(result);
