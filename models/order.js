@@ -104,8 +104,15 @@ exports.update_payment_status = async (data) => {
     });
 };
 
+
 exports.update_order_status = async (data) => {
-    const token = "cJi7diY7SkGWoZN3_U_KEP:APA91bG42f4nDXULm-gstqs8kTcU21TKA2-PHjN15VD6d3A-TUbpyuuNE4ZNyiWh2hqJmyUzax3z6mbuKYFFlYEa5qPrNwHKQKslNoVC7ETAP5maMTiEsdj6PfI0-6cFxHoTPcKlfCHE";
+    const orderStatus = {
+        req: 'Requested',
+        pre: 'Preparing',
+        ofd: 'Out for delivery',
+        com: 'Completed',
+        can: 'Cancelled'
+    }
     const {id, order_status} = data;
     return new Promise((resolve, reject) => {
         let query = 'UPDATE tbl_order SET ? WHERE  id = ?';
@@ -115,7 +122,14 @@ exports.update_order_status = async (data) => {
               const error = new Error(err);
               reject(error);
             } else {
-                admin.notificationTo({title: `Your order status changed`, body: "Click to open", token:token});
+                const query_fcm_token = `SELECT tbl_fcm_token.token FROM tbl_fcm_token JOIN tbl_order ON tbl_fcm_token.user_id = tbl_order.user_id WHERE tbl_order.id = ${data.id}`;
+                db.query(query_fcm_token, (err, result) => {
+                    if (err) {
+                        console.log(error);
+                    } else {
+                        admin.notificationTo({title: `Your order is ${orderStatus[data.status]}`, body: "Click to open", token: result[0].token});
+                    }
+                })
                 resolve(result);
             }
         })
