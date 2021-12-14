@@ -125,7 +125,7 @@ exports.update_order_status = async (data) => {
                 const query_fcm_token = `SELECT tbl_fcm_token.token FROM tbl_fcm_token JOIN tbl_order ON tbl_fcm_token.user_id = tbl_order.user_id WHERE tbl_order.id = ${data.id}`;
                 db.query(query_fcm_token, (err, result) => {
                     if (err) {
-                        console.log(error);
+                        console.log(err);
                     } else {
                         admin.notificationTo({title: `Your order is ${orderStatus[order_status]}`, body: "Click to open", token: result[0].token});
                     }

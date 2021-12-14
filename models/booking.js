@@ -68,7 +68,7 @@ exports.change_status = async (req) => {
                 const query_fcm_token = `SELECT tbl_fcm_token.token FROM tbl_fcm_token JOIN tbl_offers ON tbl_fcm_token.user_id = tbl_offers.user_id WHERE tbl_offers.id = ${id}`;
                 db.query(query_fcm_token, (err, result) => {
                     if (err) {
-                        console.log(error);
+                        console.log(err);
                     } else {
                         admin.notificationTo({title: `Your table is ${offerStatus[booking_status]}`, body: "Click to open", token: result[0].token});
                     }
