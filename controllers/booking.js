@@ -42,7 +42,7 @@ exports.change_status = async (req, res, next) => {
 };
 
 exports.change_status_user = async (req, res, next) => {
-    bookingModel.change_status_user(req.body).then(() => {
+    bookingModel.change_status_user({body: req.body, userId: req.user.id}).then(() => {
         return res.status(200).json({
             message: "Booking cancelled",
             data: [],

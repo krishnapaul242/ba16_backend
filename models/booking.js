@@ -79,10 +79,10 @@ exports.change_status = async (req) => {
     });
 };
 
-exports.change_status_user = async (req) => {
-    const {id, booking_status} = req
+exports.change_status_user = async ({body, userId}) => {
+    const {id, booking_status} = body
     return new Promise((resolve, reject) => {
-        let query = `UPDATE tbl_bookings SET ? WHERE id = ? and booking_status = "req" and user_id = ${req.user.id} `;
+        let query = `UPDATE tbl_bookings SET ? WHERE id = ? and booking_status = "req" and user_id = ${userId} `;
         db.query(query, [{booking_status}, id], (err, result) => {
             if (err) {
               const error = new Error(err);
