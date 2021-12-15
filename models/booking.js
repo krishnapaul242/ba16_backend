@@ -79,6 +79,22 @@ exports.change_status = async (req) => {
     });
 };
 
+exports.change_status_user = async (req) => {
+    const {id, booking_status} = req
+    return new Promise((resolve, reject) => {
+        let query = `UPDATE tbl_bookings SET ? WHERE id = ? and booking_status = "req" and user_id = ${req.user.id} `;
+        db.query(query, [{booking_status}, id], (err, result) => {
+            if (err) {
+              const error = new Error(err);
+              reject(error);
+            } else {
+                admin.notification({title: `Table no. ${id} has been cancelled`, body: "Click to open", topic: 'admin'});
+                resolve(result);
+            }
+        })
+    });
+};
+
 exports.check_status = async (req) => {
     const condition = req.reduce((a, c) => { return a + ',' + c.id }, req[0].id)
     let query = `SELECT id, booking_status FROM tbl_bookings WHERE id in (${condition})`;

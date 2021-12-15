@@ -5,9 +5,11 @@ const {validateBody} = require('../middleware/validation/schema/validateSchema')
 const bookingController = require('../controllers/booking');
 const router = express.Router();
 
-router.route('/:status').get(isAdminAuthenticated, bookingController.get_bookings );
+router.route('/:status').get(isAdminAuthenticated, bookingController.get_bookings);
+router.route('/user/:status').get(isUserAuthenticated, bookingController.get_bookings);
 router.route('/').post(isUserAuthenticated, validateBody(booking_schema), bookingController.add_booking);
 router.route('/change_status').put(isAdminAuthenticated, validateBody(change_booking_status), bookingController.change_status);
+router.route('/user/change_status').put(isUserAuthenticated, validateBody(change_booking_status_user), bookingController.change_status_user);
 // router.route('/change_status/user').put(isAdminAuthenticated, validateBody(change_booking_status_user), bookingController.change_status);
 router.route('/check_status').post(isUserAuthenticated, bookingController.check_status);
 

@@ -41,6 +41,19 @@ exports.change_status = async (req, res, next) => {
     });
 };
 
+exports.change_status_user = async (req, res, next) => {
+    bookingModel.change_status_user(req.body).then(() => {
+        return res.status(200).json({
+            message: "Booking cancelled",
+            data: [],
+            status: 1
+        });
+    }).catch(err => {
+        const error = new Error(err);
+        next(error);
+    });
+};
+
 exports.check_status = (req, res, next) => {
     try {
         bookingModel.check_status(req.body).then(async (data) => {
