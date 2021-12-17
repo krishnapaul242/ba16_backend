@@ -7,7 +7,7 @@ admin.initializeApp({
 });
 
 exports.notification = async ({title, body}) => await admin.messaging().send({
-    notification: { title, body },
+    data: { title, body },
     topic: 'admin'
 }).then(function(response) {
   console.log("Successfully sent message:", response);

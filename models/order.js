@@ -111,11 +111,11 @@ exports.update_payment_status = async (data) => {
 
 exports.update_order_status = async (data) => {
     const orderStatus = {
-        req: 'Requested',
-        pre: 'Preparing',
-        ofd: 'Out for delivery',
-        com: 'Completed',
-        can: 'Cancelled'
+        req: 'requested',
+        pre: 'preparing',
+        ofd: 'out for delivery',
+        com: 'completed',
+        can: 'cancelled'
     }
     const {id, order_status} = data;
     return new Promise((resolve, reject) => {
@@ -131,7 +131,7 @@ exports.update_order_status = async (data) => {
                     if (err || !result[0]) {
                         console.log({message: 'token not found'})
                     } else {
-                        admin.notificationTo({title: `Your order is ${orderStatus[order_status]}`, body: "Click to open", token: result[0].token});
+                        admin.notificationTo({title: `Your order has been ${orderStatus[order_status]}`, body: "Click to open", token: result[0].token});
                     }
                 })
                 resolve(result);

@@ -52,10 +52,10 @@ exports.get_booking = async (status) => {
 
 exports.change_status = async (req) => {
     const bookingStatus = {
-        req: 'Requested',
-        app: 'Approved',
-        can: 'Cancelled',
-        com: 'Completed'
+        req: 'requested',
+        app: 'approved',
+        can: 'cancelled',
+        com: 'completed'
     }
     const {id, booking_status} = req
     return new Promise((resolve, reject) => {
@@ -70,7 +70,7 @@ exports.change_status = async (req) => {
                     if (err || !result[0]) {
                         console.log({message: 'token not found'})
                     } else {
-                        admin.notificationTo({title: `Your table is ${bookingStatus[booking_status]}`, body: "Click to open", token: result[0].token});
+                        admin.notificationTo({title: `Your table has been ${bookingStatus[booking_status]}`, body: "Click to open", token: result[0].token});
                     }
                 })
                 resolve(result);
