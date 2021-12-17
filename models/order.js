@@ -131,7 +131,7 @@ exports.update_order_status = async (data) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        admin.notificationTo({title: `Your order is ${orderStatus[order_status]}`, body: "Click to open", token: result[0].token});
+                        admin.notificationTo({title: `Your order is ${orderStatus[order_status]}`, body: "Click to open", token: result[0]?.token});
                     }
                 })
                 resolve(result);
