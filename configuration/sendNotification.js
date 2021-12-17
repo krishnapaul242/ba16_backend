@@ -16,7 +16,7 @@ exports.notification = async ({title, body}) => await admin.messaging().send({
 });
 
 exports.notificationTo = async ({title, body, token}) => await admin.messaging().send({
-  notification: { title, body },
+  body: { title, body },
   token: token
 }).then(function(response) {
 console.log("Successfully sent message:", response);
