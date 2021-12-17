@@ -70,7 +70,7 @@ exports.change_status = async (req) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        admin.notificationTo({title: `Your table is ${bookingStatus[booking_status]}`, body: "Click to open", token: result[0].token});
+                        admin.notificationTo({title: `Your table is ${bookingStatus[booking_status]}`, body: "Click to open", token: result[0]?.token});
                     }
                 })
                 resolve(result);
