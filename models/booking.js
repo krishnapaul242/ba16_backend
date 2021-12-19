@@ -19,7 +19,7 @@ exports.add_booking = async (req) => {
         user_phone
     }
     return new Promise((resolve, reject) => {
-        let query1 = `DELETE FROM tbl_bookings WHERE user_id=${user_id};`
+        let query1 = `DELETE FROM tbl_bookings WHERE user_id=${user_id} AND booking_status=${"req"};`
         let query2 =  `INSERT INTO tbl_bookings SET ?;`
         let value = [book];
         db.query(query1, (err, result) => {
