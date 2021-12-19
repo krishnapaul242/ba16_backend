@@ -19,16 +19,22 @@ exports.add_booking = async (req) => {
         user_phone
     }
     return new Promise((resolve, reject) => {
-        let query = 'INSERT INTO tbl_bookings SET ?';
+        let query1 = `DELETE FROM tbl_bookings WHERE user_id=${user_id};`
+        let query2 =  `INSERT INTO tbl_bookings SET ?;`
         let value = [book];
-        db.query(query, value, (err, result) => {
+        db.query(query1, (err, result) => {
             if (err) {
-              const error = new Error(err);
               reject(error);
-            } else {
-              admin.notification({title: `New table booked!`, body: "Click to open"});
-              resolve(result);
             }
+            db.query(query2, value, (err, result) => {
+                if (err) {
+                  const error = new Error(err);
+                  reject(error);
+                } else {
+                  admin.notification({title: `New table booked!`, body: "Click to open"});
+                  resolve(result);
+                }
+            })
         })
     });
 };
