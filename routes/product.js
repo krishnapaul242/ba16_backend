@@ -14,7 +14,7 @@ router.route('/').post(isAdminAuthenticated, validateBody(add_product), productD
 router.route('/').put(isAdminAuthenticated, validateBody(update_product), productDbValidate.check_product,productController.update_product);
 router.route('/').delete(isAdminAuthenticated, validateBody(delete_product),productDbValidate.check_product,productController.delete_product);
 router.route('/').get(isAdminAuthenticated, productController.get_product_list);
-router.route('/user').get(isUserAuthenticated, productController.get_product_list);
+router.route('/user').get(productController.get_product_list);
 router.route('/category/user').get(isUserAuthenticated, productController.get_category_list);
 
 module.exports = router;
