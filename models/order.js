@@ -30,22 +30,51 @@ exports.add_order = async (order, product) => {
 
 exports.get_orders = async (status) => {
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`;
-        if (status === "com") {
-            query = query + ' AND DATE(updated_at) = CURDATE()';
-        }
-        db.query(query, (err, result) => {
+        let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`
+        db.query(query, (err, order) => {
             if (err) {
                 const error = new Error(err);
                 reject(error);
             } else {
-                resolve(result.reverse());
+                if (!order.length) {
+                    resolve([])
+                } else {
+                    let queryOrderedProducts = `SELECT tbl_ordered_products.order_id, tbl_ordered_products.product_id, tbl_products.price, tbl_products.name, tbl_products.image, tbl_ordered_products.quantity FROM tbl_ordered_products JOIN tbl_products ON tbl_ordered_products.product_id = tbl_products.id WHERE order_id IN (${order.map(obj => obj.id).join(', ')});`
+                    db.query(queryOrderedProducts, (err, result) => {
+                        if (err) {
+                            const error = new Error(err);
+                            reject(error);
+                        } else {
+                            let data = []
+                            order.forEach(order => {
+                                order.products = result.filter(product => product.order_id === order.id)
+                                data.push(order)
+                            })
+                            resolve(data.reverse());
+                        }
+                    })
+                }
             }
         })
+
     });
+    // return new Promise((resolve, reject) => {
+    //     let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`;
+    //     if (status === "com") {
+    //         query = query + ' AND DATE(updated_at) = CURDATE()';
+    //     }
+    //     db.query(query, (err, result) => {
+    //         if (err) {
+    //             const error = new Error(err);
+    //             reject(error);
+    //         } else {
+    //             resolve(result.reverse());
+    //         }
+    //     })
+    // });
 };
 
-exports.get_orders_user = async (id = 1) => {
+exports.get_orders_user = async (id) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_order WHERE order_status != 'can' AND user_id = ${id};`
         db.query(query, (err, order) => {
