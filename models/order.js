@@ -31,6 +31,9 @@ exports.add_order = async (order, product) => {
 exports.get_orders = async (status) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`
+        if (status === 'com') {
+            query + " AND order_status = 'can'"
+        }
         db.query(query, (err, order) => {
             if (err) {
                 const error = new Error(err);
@@ -58,20 +61,6 @@ exports.get_orders = async (status) => {
         })
 
     });
-    // return new Promise((resolve, reject) => {
-    //     let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`;
-    //     if (status === "com") {
-    //         query = query + ' AND DATE(updated_at) = CURDATE()';
-    //     }
-    //     db.query(query, (err, result) => {
-    //         if (err) {
-    //             const error = new Error(err);
-    //             reject(error);
-    //         } else {
-    //             resolve(result.reverse());
-    //         }
-    //     })
-    // });
 };
 
 exports.get_orders_user = async (id) => {
