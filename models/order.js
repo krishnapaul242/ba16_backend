@@ -32,7 +32,7 @@ exports.get_orders = async (status) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`
         if (status === 'com') {
-            query + " AND order_status = 'can'"
+            query = query + " AND order_status = 'can'"
         }
         db.query(query, (err, order) => {
             if (err) {
