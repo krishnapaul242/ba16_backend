@@ -30,9 +30,11 @@ exports.add_order = async (order, product) => {
 
 exports.get_orders = async (status) => {
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM tbl_order WHERE order_status = '${status}'`
+        let query = `SELECT * FROM tbl_order WHERE order_status`
         if (status === 'com') {
-            query = query + " AND order_status = 'can'"
+            query = query + " IN ('com', 'can')"
+        } else {
+            query = query + ` = '${status}'` 
         }
         db.query(query, (err, order) => {
             if (err) {

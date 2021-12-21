@@ -20,6 +20,7 @@ const offerRouter = require('./routes/offer');
 const bookingRouter = require('./routes/booking');
 const dashboardRoute = require('./routes/dashboard');
 
+const admin = require('./configuration/sendNotification');
 
 
 const app = express();
@@ -55,6 +56,10 @@ app.use('/api/order', orderRouter);
 app.use('/api/offer', offerRouter);
 app.use('/api/booking', bookingRouter);
 app.use('/api/dashboard', dashboardRoute);
+app.post('/check_notification', async (req, res) => {
+    admin.notificationTo({title: `Checking Notification`, body: "Click to open", token: req.body.token});
+    res.send({status: "success"});
+})
 
 
 
