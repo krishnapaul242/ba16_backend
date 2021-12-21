@@ -67,7 +67,7 @@ exports.get_orders = async (status) => {
 
 exports.get_orders_user = async (id) => {
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM tbl_order WHERE order_status != 'can' AND user_id = ${id};`
+        let query = `SELECT * FROM tbl_order WHERE user_id = ${id};`
         db.query(query, (err, order) => {
             if (err) {
                 const error = new Error(err);
