@@ -29,7 +29,7 @@ module.exports = {
                 return helper.error(error);
             }
         }).required(),
-        is_avaliable: joi.string().valid('ta','hd').optional().allow(''),
+        is_avaliable: joi.string().valid('Yes','No').optional().allow(''),
         image: joi.string().custom((value, helper) => {
             try {
                 const matches = value.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
@@ -69,7 +69,7 @@ module.exports = {
                 return helper.error(error);
             }
         }).required(),
-        is_avaliable: joi.string().valid('ta','hd').optional().allow(''),
+        is_avaliable: joi.string().valid('Yes','No').optional().allow(''),
         image: joi.string().custom((value, helper) => {
             try {
                 const matches = value.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
