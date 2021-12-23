@@ -44,7 +44,7 @@ exports.get_orders = async (status) => {
                 if (!order.length) {
                     resolve([])
                 } else {
-                    let queryOrderedProducts = `SELECT tbl_ordered_products.order_id, tbl_ordered_products.product_id, tbl_products.price, tbl_products.name, tbl_products.image, tbl_ordered_products.quantity FROM tbl_ordered_products JOIN tbl_products ON tbl_ordered_products.product_id = tbl_products.id WHERE order_id IN (${order.map(obj => obj.id).join(', ')});`
+                    let queryOrderedProducts = `SELECT tbl_ordered_products.order_id, tbl_ordered_products.product_id, tbl_products.price, tbl_products.name, tbl_products.image, tbl_ordered_products.quantity tbl_ordered_products.sub_total FROM tbl_ordered_products JOIN tbl_products ON tbl_ordered_products.product_id = tbl_products.id WHERE order_id IN (${order.map(obj => obj.id).join(', ')});`
                     db.query(queryOrderedProducts, (err, result) => {
                         if (err) {
                             const error = new Error(err);
@@ -76,7 +76,7 @@ exports.get_orders_user = async (id) => {
                 if (!order.length) {
                     resolve([])
                 } else {
-                    let queryOrderedProducts = `SELECT tbl_ordered_products.order_id, tbl_ordered_products.product_id, tbl_products.price, tbl_products.name, tbl_products.image, tbl_ordered_products.quantity FROM tbl_ordered_products JOIN tbl_products ON tbl_ordered_products.product_id = tbl_products.id WHERE order_id IN (${order.map(obj => obj.id).join(', ')});`
+                    let queryOrderedProducts = `SELECT tbl_ordered_products.order_id, tbl_ordered_products.product_id, tbl_products.price, tbl_products.name, tbl_products.image, tbl_ordered_products.quantity tbl_ordered_products.sub_total FROM tbl_ordered_products JOIN tbl_products ON tbl_ordered_products.product_id = tbl_products.id WHERE order_id IN (${order.map(obj => obj.id).join(', ')});`
                     db.query(queryOrderedProducts, (err, result) => {
                         if (err) {
                             const error = new Error(err);
