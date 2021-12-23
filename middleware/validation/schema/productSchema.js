@@ -12,7 +12,7 @@ module.exports = {
     }),
     add_product: joi.object({
         name: joi.string().trim().required(),
-        description: joi.string().trim().required(),
+        description: joi.string().optional().allow(''),
         category: joi.string().trim().required(),
         price: joi.string().trim().regex(/^[0-9]+$/).required(),
         discount_price: joi.string().allow(null).allow("").trim().regex(/^[0-9]+$/).optional(),
@@ -64,7 +64,7 @@ module.exports = {
     }),
     update_product: joi.object({
         name: joi.string().trim().required(),
-        description: joi.string().trim().required(),
+        description: joi.string().optional().allow(''),
         category: joi.string().trim().required(),
         price: joi.string().trim().regex(/^[0-9]+$/).required(),
         discount_price: joi.string().allow(null).allow("").trim().regex(/^[0-9]+$/).optional(),
