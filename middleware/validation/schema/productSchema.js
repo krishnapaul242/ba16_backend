@@ -29,19 +29,7 @@ module.exports = {
                 return helper.error(error);
             }
         }).required(),
-        is_avaliable: joi.string().trim().optional().allow(null).allow("").custom((value, helper) => {
-            try {
-                const arr = ['Yes', 'No', 'yes', 'no'];
-                if (arr.includes(value)) {
-                    return capitalizeFirstLetter(value);
-                } else {
-                    return helper.message('Enter the Yes or No');
-                }
-            } catch (err) {
-                const error = new Error(err);
-                return helper.error(error);
-            }
-        }),
+        is_avaliable: joi.string().valid('ta','hd').optional().allow(''),
         image: joi.string().custom((value, helper) => {
             try {
                 const matches = value.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
@@ -81,19 +69,7 @@ module.exports = {
                 return helper.error(error);
             }
         }).required(),
-        is_avaliable: joi.string().trim().optional().allow(null).allow("").custom((value, helper) => {
-            try {
-                const arr = ['Yes', 'No', 'yes', 'no'];
-                if (arr.includes(value)) {
-                    return capitalizeFirstLetter(value);
-                } else {
-                    return helper.message('Enter the Yes or No');
-                }
-            } catch (err) {
-                const error = new Error(err);
-                return helper.error(error);
-            }
-        }),
+        is_avaliable: joi.string().valid('ta','hd').optional().allow(''),
         image: joi.string().custom((value, helper) => {
             try {
                 const matches = value.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
