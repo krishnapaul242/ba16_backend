@@ -32,9 +32,9 @@ exports.get_orders = async (status) => {
     return new Promise((resolve, reject) => {
         let query = `SELECT * FROM tbl_order WHERE order_status`
         if (status === 'com') {
-            query = query + " IN ('com', 'can')"
+            query = query + " IN ('com', 'can') AND DATE(created_at) = CURDATE()"
         } else {
-            query = query + ` = '${status}'` 
+            query = query + ` = '${status}' AND DATE(created_at) = CURDATE()`
         }
         db.query(query, (err, order) => {
             if (err) {
