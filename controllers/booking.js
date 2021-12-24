@@ -29,7 +29,7 @@ exports.get_bookings = (req, res, next) => {
 };
 
 exports.get_bookings_user = (req, res, next) => {
-    bookingModel.get_bookings_user(req.user.id).then(result => {
+    bookingModel.get_booking_user(req.user.id).then(result => {
         return res.status(200).json({
             message: "Order booked successfully",
             data: result,
