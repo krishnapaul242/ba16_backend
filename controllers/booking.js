@@ -28,6 +28,19 @@ exports.get_bookings = (req, res, next) => {
     })
 };
 
+exports.get_bookings_user = (req, res, next) => {
+    bookingModel.get_bookings_user(req.user.id).then(result => {
+        return res.status(200).json({
+            message: "Order booked successfully",
+            data: result,
+            status: 1
+        });
+    }).catch(err => {
+        const error = new Error(err);
+        next(error);
+    })
+};
+
 exports.change_status = async (req, res, next) => {
     bookingModel.change_status(req.body).then(() => {
         return res.status(200).json({

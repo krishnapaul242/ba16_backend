@@ -19,7 +19,7 @@ exports.add_booking = async (req) => {
         user_phone
     }
     return new Promise((resolve, reject) => {
-        let query1 = `DELETE FROM tbl_bookings WHERE user_id=${user_id} AND booking_status="req";`
+        let query1 = `DELETE FROM tbl_bookings WHERE user_id=${user_id};`
         let query2 =  `INSERT INTO tbl_bookings SET ?;`
         let value = [book];
         db.query(query1, (err, result) => {
@@ -45,6 +45,20 @@ exports.get_booking = async (status) => {
         if (status === "com") {
             query = query + ' AND DATE(updated_at) = CURDATE()';
         }
+        db.query(query, (err, result) => {
+            if (err) {
+              const error = new Error(err);
+              reject(error);
+            } else {
+                resolve(result.reverse());
+            }
+        })
+    });
+};
+
+exports.get_booking_user = async (id) => {
+    return new Promise((resolve, reject) => {
+        let query = `SELECT * FROM tbl_bookings WHERE user_id='${id}'`;
         db.query(query, (err, result) => {
             if (err) {
               const error = new Error(err);
