@@ -10,10 +10,10 @@ exports.getStatistics = (req, res, next) => {
         total_users: 0,
         total_poducts: 0,
     }
-    let queryOrders = 'SELECT * FROM tbl_order';
+    let queryOrders = 'SELECT * FROM tbl_order WHERE DATE(created_at) = CURDATE()';
     let countQuery = `SELECT 'user' AS name, COUNT(*) AS number FROM tbl_users UNION
                       SELECT 'product',      COUNT(*)           FROM tbl_products UNION
-                      SELECT 'booking',      COUNT(*)           FROM tbl_bookings;`
+                      SELECT 'booking',      COUNT(*)           FROM tbl_bookings WHERE DATE(created_at) = CURDATE();`
     db.query(queryOrders, (err, result) => {
         if (err) {
             return res.status(500).json({
